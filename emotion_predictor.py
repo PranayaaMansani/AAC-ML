@@ -1,19 +1,17 @@
 import torch
-from transformers import BertTokenizerFast, BertForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-# Use a publicly available GoEmotions model
-model_name = "monologg/bert-base-cased-goemotions-original"
+# Load model and tokenizer
+model_name = "joeddav/distilbert-base-uncased-go-emotions-student"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
-# Load tokenizer and model
-tokenizer = BertTokenizerFast.from_pretrained(model_name)
-model = BertForSequenceClassification.from_pretrained(model_name)
-
-# Put model on device
+# Device setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 model.eval()
 
-# Emotion label mapping (27 emotions + neutral)
+# Emotion labels
 id2label = [
     "admiration", "amusement", "anger", "annoyance", "approval", "caring",
     "confusion", "curiosity", "desire", "disappointment", "disapproval",
@@ -22,17 +20,18 @@ id2label = [
     "relief", "remorse", "sadness", "surprise", "neutral"
 ]
 
-# Enter your custom text here
-test_text = "i am happy."
+# Input text
+text = "I passed the exam and I feel so relieved and happy!"
 
-# Tokenize input
-inputs = tokenizer(test_text, return_tensors="pt", truncation=True, padding=True).to(device)
 
-# Run prediction
+# Tokenize
+inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(device)
+
+# Predict
 with torch.no_grad():
     outputs = model(**inputs)
-    logits = outputs.logits
-    predicted_label = torch.argmax(logits, dim=1).item()
+    probs = torch.sigmoid(outputs.logits)  # multi-label probs
+    top_idx = torch.argmax(probs, dim=1).item()  # single top emotion
 
-# Print result
-print(f"Predicted emotion: {id2label[predicted_label]}")
+# Show result
+print(f"Predicted emotion: {id2label[top_idx]}")
