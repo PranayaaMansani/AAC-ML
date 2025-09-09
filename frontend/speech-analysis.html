@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Metrics - Speech Analysis</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar styling for the sidebar */
+        .sidebar-nav::-webkit-scrollbar {
+            width: 8px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: #181D2B;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 4px;
+            border: 2px solid #181D2B;
+        }
+        /* Custom box shadow to match the template's cards */
+        .custom-card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-[#0D121F] text-gray-200">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <nav class="flex flex-col w-64 bg-[#141A2E] text-gray-300 p-6 overflow-y-auto">
+            <!-- Logo and title -->
+            <div class="flex items-center space-x-2 pb-6 border-b border-gray-700 mb-6">
+                <i class="fas fa-heartbeat text-emerald-400 text-2xl"></i>
+                <h1 class="text-xl font-bold text-white">Mood Metrics</h1>
+            </div>
+
+            <!-- Main Navigation -->
+            <ul class="flex-grow space-y-2 sidebar-nav">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-chart-line text-gray-400"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="text-analysis.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-pen-alt text-gray-400"></i>
+                        <span class="font-medium">Text Analysis</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="speech-analysis.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200 active-nav">
+                        <i class="fas fa-microphone text-emerald-400"></i>
+                        <span class="font-medium text-white">Speech Analysis</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="video-analysis.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-video text-gray-400"></i>
+                        <span class="font-medium">Video Analysis</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="ai-chatbot.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-robot text-gray-400"></i>
+                        <span class="font-medium">AI Chatbot</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="analytics.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-chart-bar text-gray-400"></i>
+                        <span class="font-medium">Analytics</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Account Navigation -->
+            <div class="mt-8 pt-6 border-t border-gray-700 space-y-2">
+                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Account</h2>
+                <ul class="space-y-2">
+                    <li class="nav-item">
+                        <a href="settings.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                            <i class="fas fa-cog text-gray-400"></i>
+                            <span class="font-medium">Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="profile.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                            <i class="fas fa-user-circle text-gray-400"></i>
+                            <span class="font-medium">Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Sign Out Button -->
+            <div class="mt-8 border-t border-gray-700 pt-4">
+                <button id="signOutBtn" class="w-full flex items-center justify-center space-x-3 p-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="font-medium">Sign Out</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="flex-1 p-8 overflow-y-auto bg-[#0D121F]">
+            <!-- Header -->
+            <header class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-white">Speech Analysis</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <i class="fas fa-bell text-gray-400 text-lg"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </div>
+                    <img src="https://placehold.co/40x40/5eead4/000000?text=A" alt="User Profile" class="w-10 h-10 rounded-full border-2 border-emerald-400">
+                    <a href="dashboard.html#new-analysis" class="bg-emerald-400 text-slate-900 font-bold py-2 px-4 rounded-lg hover:bg-emerald-500 transition-colors duration-200">New Analysis</a>
+                </div>
+            </header>
+
+            <!-- Speech Analysis Page Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Left Panel: Audio Recording -->
+                <div class="bg-[#141A2E] p-6 rounded-lg custom-card-shadow">
+                    <h2 class="text-xl font-semibold text-white mb-2">Audio Recording</h2>
+                    <p class="text-gray-400 text-sm mb-4">Record audio or upload a file for emotion analysis</p>
+                    
+                    <div class="flex flex-col items-center justify-center h-64 bg-[#0D121F] border-2 border-dashed border-gray-600 rounded-lg p-4 text-center">
+                        <i class="fas fa-microphone text-blue-500 text-5xl mb-4"></i>
+                        <p class="text-gray-400">Record or upload audio to see emotion analysis</p>
+                    </div>
+
+                    <div class="flex flex-col items-center mt-6 space-y-4">
+                        <button id="startRecordingBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-md transition-colors duration-200">
+                            Start Recording
+                        </button>
+                        <button id="uploadAudioBtn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition-colors duration-200">
+                            <i class="fas fa-upload mr-2"></i>
+                            Upload Audio
+                        </button>
+                        <input type="file" id="audioUploadInput" class="hidden" accept="audio/*">
+                    </div>
+                </div>
+
+                <!-- Right Panel: Speech Analysis Results -->
+                <div class="bg-[#141A2E] p-6 rounded-lg custom-card-shadow">
+                    <h2 class="text-xl font-semibold text-white mb-2">Speech Analysis Results</h2>
+                    <p class="text-gray-400 text-sm mb-4">Emotion detection from voice patterns and tone</p>
+                    
+                    <div id="resultsContainer" class="flex flex-col items-center justify-center h-64 bg-[#0D121F] border-2 border-dashed border-gray-600 rounded-lg p-4 text-center">
+                        <i class="fas fa-microphone text-gray-400 text-5xl mb-4"></i>
+                        <p class="text-gray-400">Record or upload audio to see emotion analysis</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-item a');
+            const mainContent = document.getElementById('main-content');
+            const dashboardHeader = mainContent.querySelector('header h1');
+
+            // Function to handle active navigation link styling
+            function setActiveNav(href) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav', 'bg-[#1E2540]');
+                    link.classList.add('hover:bg-[#1E2540]');
+                    link.querySelector('i').classList.remove('text-emerald-400');
+                    link.querySelector('i').classList.add('text-gray-400');
+                    link.querySelector('span').classList.remove('text-white');
+                    link.querySelector('span').classList.add('text-gray-300');
+                });
+                const activeLink = document.querySelector(`.nav-item a[href="${href}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-nav', 'bg-[#1E2540]');
+                    activeLink.classList.remove('hover:bg-[#1E2540]');
+                    activeLink.querySelector('i').classList.remove('text-gray-400');
+                    activeLink.querySelector('i').classList.add('text-emerald-400');
+                    activeLink.querySelector('span').classList.remove('text-gray-300');
+                    activeLink.querySelector('span').classList.add('text-white');
+                }
+            }
+
+            // Set initial active nav link
+            setActiveNav(window.location.pathname.split('/').pop());
+
+            // Handle sign out button click
+            const signOutBtn = document.getElementById('signOutBtn');
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', () => {
+                    console.log('User signed out.');
+                    alert('You have been signed out.');
+                });
+            }
+
+            // Speech Analysis Page Specific JS
+            const startRecordingBtn = document.getElementById('startRecordingBtn');
+            const uploadAudioBtn = document.getElementById('uploadAudioBtn');
+            const audioUploadInput = document.getElementById('audioUploadInput');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            // This script would contain the logic for Web Audio API and API calls
+            // This is a placeholder for future implementation
+            let mediaRecorder;
+            let audioChunks = [];
+
+            if (startRecordingBtn) {
+                startRecordingBtn.addEventListener('click', async () => {
+                    if (mediaRecorder && mediaRecorder.state === 'recording') {
+                        // Stop recording
+                        mediaRecorder.stop();
+                        startRecordingBtn.textContent = 'Start Recording';
+                        startRecordingBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                        startRecordingBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                        resultsContainer.innerHTML = '<div class="text-gray-400 text-center py-8">Processing audio...</div>';
+                    } else {
+                        // Start recording
+                        try {
+                            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                            mediaRecorder = new MediaRecorder(stream);
+                            audioChunks = [];
+                            mediaRecorder.addEventListener('dataavailable', event => {
+                                audioChunks.push(event.data);
+                            });
+                            mediaRecorder.addEventListener('stop', () => {
+                                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                                // In a real app, you would send this blob to your backend for analysis
+                                console.log('Audio recorded:', audioBlob);
+                                resultsContainer.innerHTML = `<p class="text-white">Audio recorded successfully. Awaiting analysis...</p>`;
+                            });
+                            mediaRecorder.start();
+                            startRecordingBtn.textContent = 'Stop Recording';
+                            startRecordingBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                            startRecordingBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                            resultsContainer.innerHTML = '<p class="text-white">Recording...</p>';
+                        } catch (err) {
+                            console.error('Error accessing microphone:', err);
+                            resultsContainer.innerHTML = `<div class="text-red-400 text-center py-8">Error: Could not access microphone.</div>`;
+                        }
+                    }
+                });
+            }
+
+            if (uploadAudioBtn) {
+                uploadAudioBtn.addEventListener('click', () => {
+                    audioUploadInput.click();
+                });
+            }
+
+            if (audioUploadInput) {
+                audioUploadInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        // Handle the uploaded file
+                        console.log('File uploaded:', file.name);
+                        resultsContainer.innerHTML = `<p class="text-white">File "${file.name}" uploaded successfully. Awaiting analysis...</p>`;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

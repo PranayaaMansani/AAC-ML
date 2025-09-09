@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Metrics - AI Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar styling for the sidebar and chat window */
+        .sidebar-nav::-webkit-scrollbar,
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track,
+        .chat-container::-webkit-scrollbar-track {
+            background: #181D2B;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb,
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 4px;
+            border: 2px solid #181D2B;
+        }
+        /* Custom box shadow to match the template's cards */
+        .custom-card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-[#0D121F] text-gray-200">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <nav class="flex flex-col w-64 bg-[#141A2E] text-gray-300 p-6 overflow-y-auto">
+            <div class="flex items-center space-x-2 pb-6 border-b border-gray-700 mb-6">
+                <i class="fas fa-heartbeat text-emerald-400 text-2xl"></i>
+                <h1 class="text-xl font-bold text-white">Mood Metrics</h1>
+            </div>
+
+            <ul class="flex-grow space-y-2 sidebar-nav">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-chart-line text-gray-400"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="text-analysis.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-pen-alt text-gray-400"></i>
+                        <span class="font-medium">Text Analysis</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="speech-analysis.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-microphone text-gray-400"></i>
+                        <span class="font-medium">Speech Analysis</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="video-analysis.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-video text-gray-400"></i>
+                        <span class="font-medium">Video Analysis</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="ai-chatbot.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200 active-nav">
+                        <i class="fas fa-robot text-emerald-400"></i>
+                        <span class="font-medium text-white">AI Chatbot</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="analytics.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                        <i class="fas fa-chart-bar text-gray-400"></i>
+                        <span class="font-medium">Analytics</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mt-8 pt-6 border-t border-gray-700 space-y-2">
+                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Account</h2>
+                <ul class="space-y-2">
+                    <li class="nav-item">
+                        <a href="settings.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                            <i class="fas fa-cog text-gray-400"></i>
+                            <span class="font-medium">Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="profile.html" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1E2540] transition-colors duration-200">
+                            <i class="fas fa-user-circle text-gray-400"></i>
+                            <span class="font-medium">Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mt-8 border-t border-gray-700 pt-4">
+                <button id="signOutBtn" class="w-full flex items-center justify-center space-x-3 p-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="font-medium">Sign Out</span>
+                </button>
+            </div>
+        </nav>
+
+        <main id="main-content" class="flex-1 p-8 overflow-y-auto bg-[#0D121F]">
+            <header class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-white">AI Emotion Chatbot</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <i class="fas fa-bell text-gray-400 text-lg"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </div>
+                    <img src="https://placehold.co/40x40/5eead4/000000?text=A" alt="User Profile" class="w-10 h-10 rounded-full border-2 border-emerald-400">
+                    <a href="dashboard.html#new-analysis" class="bg-emerald-400 text-slate-900 font-bold py-2 px-4 rounded-lg hover:bg-emerald-500 transition-colors duration-200">New Analysis</a>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+                <div class="lg:col-span-2 flex flex-col bg-[#141A2E] p-6 rounded-lg custom-card-shadow h-full">
+                    <h2 class="text-xl font-semibold text-white mb-2">Conversation</h2>
+                    <p class="text-gray-400 text-sm mb-4">AI-powered chat with emotion recognition</p>
+                    
+                    <div id="chatContainer" class="chat-container flex-grow overflow-y-auto space-y-4 p-4 rounded-lg bg-[#0D121F]">
+                        <div class="flex items-end">
+                            <div class="bg-[#1E2540] p-4 rounded-xl max-w-lg shadow-md">
+                                <p class="text-white">Hello! I'm your AI emotion analysis assistant. How are you feeling today?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center mt-6">
+                        <textarea id="chatInput" rows="1" class="flex-grow p-3 bg-[#0D121F] rounded-lg border border-gray-600 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden" placeholder="Type your message..."></textarea>
+                        <button id="sendButton" class="ml-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold w-12 h-12 rounded-full shadow-md transition-colors duration-200">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-[#141A2E] p-6 rounded-lg custom-card-shadow">
+                        <h2 class="text-xl font-semibold text-white mb-4">Live Emotion Analysis</h2>
+                        <div id="liveEmotionResults">
+                            <p class="text-sm text-gray-500">Analysis will appear here after you send a message.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-[#141A2E] p-6 rounded-lg custom-card-shadow">
+                        <h2 class="text-xl font-semibold text-white mb-4">Conversation Insights</h2>
+                        <div id="conversationInsights">
+                            <p class="text-sm text-gray-500">Insights will appear here.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#141A2E] p-6 rounded-lg custom-card-shadow">
+                        <h2 class="text-xl font-semibold text-white mb-4">AI Suggestions</h2>
+                        <div id="aiSuggestions">
+                            <p class="text-sm text-gray-500">Suggestions will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-item a');
+            
+            // Function to handle active navigation link styling
+            function setActiveNav(href) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav', 'bg-[#1E2540]');
+                    link.classList.add('hover:bg-[#1E2540]');
+                    link.querySelector('i').classList.remove('text-emerald-400');
+                    link.querySelector('i').classList.add('text-gray-400');
+                    link.querySelector('span').classList.remove('text-white');
+                    link.querySelector('span').classList.add('text-gray-300');
+                });
+                const activeLink = document.querySelector(`.nav-item a[href="${href}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-nav', 'bg-[#1E2540]');
+                    activeLink.classList.remove('hover:bg-[#1E2540]');
+                    activeLink.querySelector('i').classList.remove('text-gray-400');
+                    activeLink.querySelector('i').classList.add('text-emerald-400');
+                    activeLink.querySelector('span').classList.remove('text-gray-300');
+                    activeLink.querySelector('span').classList.add('text-white');
+                }
+            }
+
+            // Set initial active nav link based on the current page
+            const currentPath = window.location.pathname.split('/').pop() || 'ai-chatbot.html';
+            setActiveNav(currentPath);
+
+            // Handle sign out button click
+            const signOutBtn = document.getElementById('signOutBtn');
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', () => {
+                    console.log('User signed out.');
+                    alert('You have been signed out.');
+                });
+            }
+
+            // --- Chatbot Logic ---
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const chatContainer = document.getElementById('chatContainer');
+            
+            // --- NEW: UI Update Elements ---
+            const liveEmotionResultsEl = document.getElementById('liveEmotionResults');
+            const conversationInsightsEl = document.getElementById('conversationInsights');
+            const aiSuggestionsEl = document.getElementById('aiSuggestions');
+
+            // Utility to add a message to the chat window
+            const addMessageToChat = (text, isUser = false) => {
+                const messageClass = isUser ? 'justify-end' : 'justify-start';
+                const messageBg = isUser ? 'bg-blue-600' : 'bg-[#1E2540]';
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${messageClass}`;
+                messageDiv.innerHTML = `
+                    <div class="${messageBg} p-4 rounded-xl max-w-lg shadow-md">
+                        <p class="text-white">${text}</p>
+                    </div>
+                `;
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            };
+            
+            // --- NEW: Function to update the analysis UI ---
+            const updateAnalysisUI = (analysisData) => {
+                const { overallMood, emotions, sentimentScore, aiSuggestion } = analysisData;
+
+                // 1. Update Live Emotion Analysis
+                const moodIcon = overallMood === 'Positive' ? 'fa-smile text-green-400' : (overallMood === 'Negative' ? 'fa-frown text-red-400' : 'fa-meh text-yellow-400');
+                let emotionBarsHtml = `<ul class="space-y-2 mt-4">`;
+                const emotionColors = {
+                    Joy: 'bg-green-400', Sadness: 'bg-blue-400', Anger: 'bg-red-400', Fear: 'bg-purple-400',
+                    Surprise: 'bg-yellow-400', Confidence: 'bg-teal-400', Curiosity: 'bg-indigo-400', Neutral: 'bg-gray-400'
+                };
+                emotions.forEach(emotion => {
+                    const color = emotionColors[emotion.name] || 'bg-gray-500';
+                    emotionBarsHtml += `
+                        <li class="text-sm">
+                            <div class="flex justify-between items-center mb-1">
+                                <span>${emotion.name}</span>
+                                <span class="text-gray-400">${emotion.score}%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="${color} h-2 rounded-full" style="width: ${emotion.score}%;"></div>
+                            </div>
+                        </li>`;
+                });
+                emotionBarsHtml += `</ul>`;
+
+                liveEmotionResultsEl.innerHTML = `
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fas ${moodIcon}"></i>
+                        <span class="font-bold text-white">Current Mood: ${overallMood}</span>
+                    </div>
+                    ${emotionBarsHtml}`;
+
+                // 2. Update Conversation Insights
+                const sentimentColor = sentimentScore >= 0.5 ? 'text-green-400' : (sentimentScore <= -0.5 ? 'text-red-400' : 'text-yellow-400');
+                conversationInsightsEl.innerHTML = `
+                    <div class="flex items-center space-x-2 mb-2">
+                        <span class="text-3xl font-bold ${sentimentColor}">${(sentimentScore * 10).toFixed(1)}</span>
+                        <span class="text-sm text-gray-400">Avg. Sentiment Score</span>
+                    </div>
+                    <p class="text-sm text-gray-400">
+                        <span class="font-medium text-white">Dominant Emotion:</span>
+                        <span class="ml-2">${emotions[0] ? emotions[0].name : 'N/A'}</span>
+                    </p>`;
+
+                // 3. Update AI Suggestions
+                aiSuggestionsEl.innerHTML = `<p class="text-sm text-gray-400">${aiSuggestion}</p>`;
+            };
+
+            // Main function to send a message and get a response
+            const sendMessage = async () => {
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
+
+                addMessageToChat(userMessage, true);
+                chatInput.value = '';
+                chatInput.style.height = 'auto'; // Reset height
+                sendButton.disabled = true;
+                sendButton.classList.add('opacity-50');
+
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'flex items-end';
+                typingIndicator.innerHTML = `
+                    <div class="bg-[#1E2540] p-4 rounded-xl max-w-lg shadow-md">
+                        <span class="text-gray-400">...</span>
+                    </div>
+                `;
+                chatContainer.appendChild(typingIndicator);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                let fullApiResponse = '';
+                
+                // --- MODIFIED: The API call logic ---
+                const apiKey = "AIzaSyAmDesgz3xZgcZVLXZVA8WFEQGyb8ZupZk"; // IMPORTANT: Paste your Gemini API key here
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+                
+                // --- MODIFIED: The new, powerful prompt ---
+                const prompt = `
+                    Analyze the user's message for emotions and then respond empathetically.
+                    The user's message is: "${userMessage}"
+
+                    First, provide a JSON object with your analysis. The JSON MUST have this exact structure:
+                    {
+                      "overallMood": "Positive" | "Negative" | "Neutral",
+                      "emotions": [
+                        {"name": "Joy", "score": <number between 0-100>},
+                        {"name": "Sadness", "score": <number between 0-100>},
+                        {"name": "Anger", "score": <number between 0-100>},
+                        {"name": "Confidence", "score": <number between 0-100>},
+                        {"name": "Curiosity", "score": <number between 0-100>}
+                      ],
+                      "sentimentScore": <a number between -1.0 and 1.0>,
+                      "aiSuggestion": "<A brief, empathetic suggestion for the user based on their mood.>"
+                    }
+
+                    After the JSON object, add '---' as a separator, and then write your natural, conversational response to the user.
+                `;
+                
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`API returned status code ${response.status}`);
+                    }
+                    const result = await response.json();
+                    fullApiResponse = result.candidates[0].content.parts[0].text;
+                } catch (error) {
+                    console.error('Error fetching chat response:', error);
+                    fullApiResponse = '---An error occurred. Please try again later.';
+                }
+
+                typingIndicator.remove();
+                
+                // --- NEW: Parse the response and update UI ---
+                try {
+                    const [jsonPart, chatPart] = fullApiResponse.split('---');
+                    
+                    // Clean up the JSON part from potential markdown backticks
+                    const cleanedJsonString = jsonPart.replace(/```json/g, '').replace(/```/g, '').trim();
+                    
+                    const analysisData = JSON.parse(cleanedJsonString);
+                    
+                    // Sort emotions by score descending and take the top 5
+                    analysisData.emotions = analysisData.emotions
+                        .sort((a, b) => b.score - a.score)
+                        .slice(0, 5);
+                        
+                    updateAnalysisUI(analysisData);
+                    addMessageToChat(chatPart.trim());
+                } catch (parseError) {
+                    console.error("Error parsing AI response:", parseError, "Full response:", fullApiResponse);
+                    addMessageToChat("I'm having a little trouble analyzing that. Could you try rephrasing?");
+                }
+                
+                sendButton.disabled = false;
+                sendButton.classList.remove('opacity-50');
+            };
+            
+            // Event listeners for sending messages
+            if (sendButton) {
+                sendButton.addEventListener('click', sendMessage);
+            }
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault();
+                        sendMessage();
+                    }
+                });
+                chatInput.addEventListener('input', () => {
+                    chatInput.style.height = 'auto';
+                    chatInput.style.height = (chatInput.scrollHeight) + 'px';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
