@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Mood Metrics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #007FFF;
+      --secondary: #AB4DFF;
+      --background: #0D1B2A;
+      --foreground: #F2F2F2;
+      --muted: #999999;
+      --card: #1B263B;
+      --radius: 0.75rem;
+      --shadow-elegant: 0 10px 30px rgba(27,38,59,0.5);
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .min-h-screen { min-height: 100vh; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .w-full { width: 100%; }
+    .max-w-md { max-width: 28rem; }
+    .text-center { text-align: center; }
+    .space-y-1 > * + * { margin-top: 0.25rem; }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-4 > * + * { margin-top: 1rem; }
+    .space-y-6 > * + * { margin-top: 1.5rem; }
+
+    .bg-background { background: var(--background); }
+    .bg-card { background: var(--card); }
+    .text-primary { color: var(--primary); }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-elegant);
+      padding: 2rem;
+    }
+
+    .card-header { text-align: center; margin-bottom: 1.5rem; }
+    .card-title { font-size: 1.5rem; font-weight: bold; }
+    .card-description { color: var(--muted); }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem 0.25rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(13,27,42,0.3);
+      color: var(--foreground);
+    }
+
+    input::placeholder { color: var(--muted); }
+    label { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; font-weight: 500; }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--secondary); }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline:hover { background: var(--primary); color: #fff; }
+
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .flex-center { display: flex; justify-content: center; align-items: center; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-4 { gap: 1rem; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .mt-6 { margin-top: 1.5rem; }
+    .text-sm { font-size: 0.875rem; }
+
+    .eye-button {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .eye-button:hover { color: var(--primary); }
+
+    .checkbox-label { display: flex; align-items: center; gap: 0.5rem; }
+
+    .separator-container {
+      position: relative;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .separator-container hr { border: none; border-top: 1px solid rgba(255,255,255,0.2); }
+    .separator-container span {
+      position: absolute;
+      top: -0.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card);
+      padding: 0 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-background flex items-center justify-center px-6">
+  <div class="w-full max-w-md">
+
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <a href="/" class="inline-flex items-center space-x-2 mb-4">
+        <i class="fas fa-chart-bar text-primary" style="font-size:2rem;"></i>
+
+        <span class="font-bold gradient-text" style="font-size:2rem;">Mood Metrics</span>
+
+      </a>
+      <p class="text-muted">Welcome back to your emotion intelligence platform</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Sign In</div>
+        <div class="card-description">Enter your credentials to access your dashboard</div>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+
+        <!-- Email -->
+        <div class="space-y-2">
+          <label for="email">
+            <i class="fas fa-envelope text-muted"></i>
+            Email Address
+          </label>
+          <input id="email" type="email" placeholder="    Enter your email" required />
+        </div>
+
+        <!-- Password -->
+        <div class="space-y-2 relative">
+          <label for="password">
+            <i class="fas fa-lock text-muted"></i>
+            Password
+          </label>
+          <input id="password" type="password" placeholder="    Enter your password" required />
+          <button type="button" class="eye-button" onclick="togglePassword()">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <!-- Remember / Forgot -->
+        <div class="flex-between mt-2">
+          <label class="checkbox-label">
+            <input type="checkbox" />
+            Remember me
+          </label>
+          <a href="#" class="text-primary text-sm">Forgot password?</a>
+        </div>
+
+        <!-- Sign In Button -->
+        <button type="submit" class="btn-primary w-full mt-4">Sign In</button>
+
+        <!-- Separator -->
+        <div class="separator-container">
+          <hr />
+          <span>Or continue with</span>
+        </div>
+
+        <!-- Social Buttons -->
+        <div class="grid grid-cols-2 gap-4 mt-4">
+          <button type="button" class="btn-outline flex-center gap-2">
+            <i class="fab fa-google"></i> Google
+          </button>
+          <button type="button" class="btn-outline flex-center gap-2">
+            <i class="fab fa-facebook"></i> Facebook
+          </button>
+        </div>
+
+        <!-- Signup Link -->
+        <div class="text-center text-sm mt-4">
+          <span class="text-muted">Don't have an account? </span>
+          <a href="/signup" class="text-primary font-medium">Create account</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const pwInput = document.getElementById('password');
+      const eyeIcon = document.querySelector('.eye-button i');
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        pwInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

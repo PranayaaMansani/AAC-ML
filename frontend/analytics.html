@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 - Page Not Found</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* General styles */
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f4f6;
+    }
+
+    .container {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 8rem;
+      font-weight: bold;
+      color: #1e3a8a;
+      margin: 0;
+      position: relative;
+      animation: bounce 1.5s infinite;
+    }
+
+    p {
+      font-size: 1.5rem;
+      color: #4b5563;
+      margin: 1rem 0 2rem;
+      opacity: 0;
+      animation: fadeInText 1s forwards 0.5s;
+    }
+
+    a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeInText 1s forwards 1s;
+    }
+
+    a:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(59,130,246,0.6);
+    }
+
+    /* Animations */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <p>Oops! Page not found</p>
+    <a href="/">Return to Home</a>
+  </div>
+</body>
+</html>
