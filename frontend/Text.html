@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+    /* Gradients & colors */
     .bg-gradient-card {
       background: linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95));
     }
@@ -32,6 +33,8 @@
     .text-accent { color: #06b6d4; }
     .border-accent { border-color: #06b6d4; }
     .bg-accent { background-color: #06b6d4; }
+
+    /* Sidebar collapse */
     .collapsed .sidebar-text { display: none; }
     .collapsed .sidebar { width: 4rem; }
     .sidebar { width: 16rem; transition: width 0.3s ease; }
@@ -82,6 +85,7 @@
   <!-- Main Content -->
   <main class="flex-1 p-6 space-y-6">
 
+    <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
         <h1 class="text-3xl font-bold flex items-center">
@@ -97,7 +101,9 @@
       </div>
     </div>
 
+    <!-- Input + Results -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Text Input -->
       <div class="bg-gradient-card border border-gray-800 rounded-xl shadow p-6 space-y-4 hover:shadow-lg smooth-transition">
         <h2 class="text-lg font-semibold">Text Input</h2>
         <p class="text-sm text-muted-foreground">Enter or paste the text you want to analyze for emotional content</p>
@@ -108,19 +114,32 @@
         </div>
       </div>
 
+      <!-- Results -->
       <div class="bg-gradient-card border border-gray-800 rounded-xl shadow p-6 hover:shadow-lg smooth-transition">
         <h2 class="text-lg font-semibold">Emotion Analysis Results</h2>
         <p class="text-sm text-muted-foreground mb-4">AI-detected emotions and confidence scores</p>
 
         <div id="results" class="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start lg:space-x-10 gap-6">
-          <div class="relative w-full lg:w-1/2 flex items-center justify-center">
-            <canvas id="emotionPieChart" class="max-w-xs w-full"></canvas>
-          </div>
-          <div id="chartAndLegend" class="flex flex-col items-start space-y-3 w-full lg:w-auto lg:ml-6"></div>
-        </div>
+  
+  <!-- Donut Chart -->
+  <div class="relative w-full lg:w-1/2 flex items-center justify-center">
+    <canvas id="emotionPieChart" class="max-w-xs w-full"></canvas>
+  </div>
+
+  <!-- Legend / Percentages -->
+  <div id="chartAndLegend" class="flex flex-col items-start space-y-3 w-full lg:w-auto lg:ml-6">
+
+    <!-- Legend items dynamically inserted here via JS -->
+  </div>
+
+</div>
+
+</div>
+
       </div>
     </div>
 
+    <!-- Detailed Analysis -->
     <div class="bg-gradient-card border border-gray-800 rounded-xl shadow p-6 hover:shadow-lg smooth-transition">
       <h2 class="text-lg font-semibold mb-4">Detailed Analysis</h2>
 
@@ -145,26 +164,31 @@
 <script>
 lucide.createIcons();
 
+// --- Element References ---
 const toggleBtn = document.getElementById("toggleSidebar");
 const sidebar = document.getElementById("sidebar");
 const textInput = document.getElementById("input-text");
 const charCount = document.getElementById("char-count");
 const analyzeBtn = document.getElementById("analyze-btn");
-const emotionPieChartCanvas = document.getElementById("emotionPieChart");
-const legendContainer = document.getElementById("chartAndLegend");
+const resultsContainer = document.getElementById("results");
 const overallSentimentEl = document.getElementById("overall-sentiment");
 const confidenceScoreEl = document.getElementById("confidence-score");
 const emotionComplexityEl = document.getElementById("emotion-complexity");
+const emotionPieChartCanvas = document.getElementById("emotionPieChart");
+const legendContainer = document.getElementById("chartAndLegend");
 let myPieChart;
 
+// --- Sidebar toggle ---
 toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("collapsed");
 });
 
+// --- Character count ---
 textInput.addEventListener("input", () => {
   charCount.textContent = `${textInput.value.length} characters`;
 });
 
+// --- Analyze button ---
 analyzeBtn.addEventListener("click", analyzeText);
 
 async function analyzeText() {
@@ -200,23 +224,35 @@ async function analyzeText() {
   }
 }
 
+// --- Render results ---
 function renderResults(data) {
   const labels = data.overall_emotions.map(e => e.emotion.charAt(0).toUpperCase() + e.emotion.slice(1));
   const percentages = data.overall_emotions.map(e => e.percentage);
   const backgroundColors = data.overall_emotions.map(e => getChartColor(e.emotion));
 
+  // Destroy previous chart
   if (myPieChart) myPieChart.destroy();
 
   myPieChart = new Chart(emotionPieChartCanvas, {
     type: 'doughnut',
-    data: { labels: labels, datasets: [{ data: percentages, backgroundColor: backgroundColors }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
+    data: {
+      labels: labels,
+      datasets: [{ data: percentages, backgroundColor: backgroundColors }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: { legend: { display: false } }
+    }
   });
 
+  // Update detailed analysis
   overallSentimentEl.textContent = data.detailed_analysis.overall_sentiment;
-  confidenceScoreEl.textContent = `${data.detailed_analysis.confidence_score}/10`;
+  confidenceScoreEl.textContent = data.detailed_analysis.confidence_score + "/10";
   emotionComplexityEl.textContent = data.detailed_analysis.emotion_complexity;
 
+  // Update legend
   legendContainer.innerHTML = "";
   data.overall_emotions.forEach(e => {
     const div = document.createElement("div");
@@ -235,6 +271,7 @@ function renderResults(data) {
   });
 }
 
+// --- Emotion colors ---
 function getChartColor(emotion) {
   const colors = {
     "joy": "#00C853", "love": "#673AB7", "optimism": "#FFAB00", "gratitude": "#2196F3",
@@ -248,6 +285,7 @@ function getChartColor(emotion) {
   return colors[emotion.toLowerCase()] || "#94a3b8";
 }
 </script>
+
 
 </body>
 </html>
