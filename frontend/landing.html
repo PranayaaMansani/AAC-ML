@@ -19,6 +19,7 @@
       --radius: 0.75rem;
       --shadow-glow: 0 0 40px rgba(0, 127, 255, 0.3);
       --shadow-card: 0 10px 30px rgba(27, 38, 59, 0.5);
+      --navbar-height: 80px;
     }
 
     body {
@@ -27,8 +28,11 @@
       background: var(--background);
       color: var(--foreground);
       line-height: 1.6;
+      scroll-behavior: smooth;
     }
+
     a { text-decoration: none; color: inherit; }
+
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
     /* Navbar */
@@ -37,7 +41,7 @@
       z-index:100; box-shadow: var(--shadow-glow); display: flex; justify-content: center;
     }
     nav .nav-container { width: 100%; display: flex; justify-content: space-between; align-items: center; max-width:1200px; }
-    .logo { display: flex; align-items:center; font-size:1.5rem; font-weight:bold; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .logo { display: flex; align-items:center; font-size:1.5rem; font-weight:bold; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; }
     .logo i { margin-right: 0.5rem; }
     .nav-links { display: flex; gap: 1rem; align-items:center; }
     .nav-links a { padding:0.5rem 1rem; border-radius:var(--radius); transition:0.3s; color: var(--foreground); }
@@ -47,7 +51,7 @@
     .btn.primary:hover { background: var(--secondary); }
 
     /* Hero */
-    .hero { padding: 8rem 0 4rem; text-align: center; }
+    .hero { padding: calc(var(--navbar-height) + 4rem) 0 4rem; text-align: center; }
     .hero .badge { display: inline-flex; align-items:center; gap:0.5rem; background: rgba(0,127,255,0.1); color: var(--primary); padding:0.5rem 1rem; border-radius:9999px; border:1px solid rgba(0,127,255,0.3); margin-bottom:1rem; font-size:0.9rem; font-weight:500;}
     .hero h1 { font-size:3rem; font-weight:bold; margin-bottom:1rem; line-height:1.2; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     .hero h1 span { color: var(--foreground); }
@@ -69,6 +73,7 @@
     .stat.support .value { color: var(--primary); }
 
     /* Features */
+    section { scroll-margin-top: var(--navbar-height); } /* offset for fixed navbar */
     .features { padding:4rem 0; }
     .features h2 { text-align:center; font-size:2rem; margin-bottom:1rem; }
     .features p { text-align:center; color: var(--muted); margin-bottom:2rem; max-width:700px; margin-left:auto; margin-right:auto;}
@@ -100,13 +105,13 @@
   <!-- Navbar -->
   <nav>
     <div class="nav-container container">
-      <div class="logo"><i class="fas fa-chart-bar"></i> Mood Metrics</div>
+      <div class="logo" onclick="window.location.href='index.html';"><i class="fas fa-chart-bar"></i> Mood Metrics</div>
       <div class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#about">About</a>
-        <a class="btn" href="#login">Login</a>
-        <a class="btn primary" href="#signup">Get Started</a>
+        <a href="usecases.html">Use Cases</a>
+        <a href="login.html" class="btn">Login</a>
+        <a href="dashboard.html" class="btn primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -117,12 +122,11 @@
       <div class="badge"><i class="fas fa-sparkles"></i> Advanced AI Emotion Recognition</div>
       <h1>Understand Emotions<br><span>Like Never Before</span></h1>
       <p>Harness the power of AI to analyze emotions across text, speech, and video, with enterprise-grade accuracy.</p>
-      <div class="btn-group">
-        <button class="btn-lg primary">Start Free Trial <i class="fas fa-arrow-right"></i></button>
-        <button class="btn-lg outline">View Demo <i class="fas fa-chevron-right"></i></button>
+      
+      <div class="btn-group" style="justify-content:center;">
+         <a href="dashboard.html" class="btn-lg primary">Let's Start <i class="fas fa-arrow-right"></i></a>
       </div>
 
-      <!-- Stats -->
       <div class="hero-stats">
         <div class="stat accuracy"><div class="value">98.5%</div>Accuracy</div>
         <div class="stat response"><div class="value">150ms</div>Response Time</div>
@@ -132,8 +136,8 @@
     </div>
   </section>
 
-  <!-- Features -->
-  <section class="features container">
+  <!-- Features Section -->
+  <section id="features" class="features container">
     <h2>Powerful Features for Every Use Case</h2>
     <p>From real-time conversations to comprehensive video analysis, our platform delivers professional-grade emotion recognition.</p>
     <div class="feature-grid">
@@ -146,13 +150,13 @@
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- CTA Section -->
   <section class="cta">
     <div class="cta-card">
       <h2>Ready to Transform Your Understanding of Emotions?</h2>
       <p>Join thousands of professionals using Mood Metrics to unlock deeper insights into human emotions and sentiment.</p>
       <div class="btn-group">
-        <button class="btn-lg primary">Start Your Free Trial <i class="fas fa-arrow-right"></i></button>
+        <a href="dashboard.html" class="btn-lg primary">Start you free trail <i class="fas fa-arrow-right"></i></a>
         <button class="btn-lg outline">Contact Sales</button>
       </div>
     </div>
@@ -167,13 +171,13 @@
       </div>
       <div>
         <h4>Product</h4>
-        <a href="#">Features</a>
-        <a href="#">Pricing</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
         <a href="#">API Documentation</a>
       </div>
       <div>
         <h4>Company</h4>
-        <a href="#">About</a>
+        <a href="#about">About</a>
         <a href="#">Blog</a>
         <a href="#">Careers</a>
       </div>
