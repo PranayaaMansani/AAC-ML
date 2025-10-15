@@ -53,7 +53,7 @@ def analyze_audio_file(file_path):
     if not text:
         return {"text": "", "top_emotion": "", "confidence": 0.0, "emotions": []}
 
-    scores = text_emotion_classifier(text)
+    scores = text_emotion_classifier(text)[0]
     scores = sorted(scores, key=lambda x: x["score"], reverse=True)
     top_emotion = scores[0]["label"]
     top_score = scores[0]["score"]
@@ -66,7 +66,7 @@ def analyze_audio_file(file_path):
     }
 
 # This test block is commented out to prevent the input prompt.
-# if _name_ == "_main_":
+# if __name__ == "__main__":
 #     test_file = input("Enter path to audio file for testing: ").strip()
 #     result = analyze_audio_file(test_file)
 #     print(result)
